@@ -2,29 +2,32 @@ version: '3.1'
 
 services:
   wordpress:
-    image: wordpress:5.8.1-fpm-alpine
+    image: wordpress:5.8.1
     restart: always
     ports:
       - 80:80
     environment:
-      WORDPRESS_DB_HOST: ${WP_DB_HOST}
+      WORDPRESS_DB_HOST: db1
       WORDPRESS_DB_USER: ${WP_DB_USER}
-      WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD}
-      WORDPRESS_DB_NAME: ${WP_DB_DATABASE}}
+      WORDPRESS_DB_PASSWORD: ${WP_DB_PASS}
+      WORDPRESS_DB_NAME: ${WP_DB}
     volumes:
       - wordpress:/var/www/html
 
-  db:
-    image: mysql:8.0.26
+  db1:
+    image: bitnami/mariadb-galera:latest
     restart: always
     environment:
-      MYSQL_DATABASE: ${WP_DB_HOST}
-      MYSQL_USER: ${WP_DB_USER}
-      MYSQL_PASSWORD: ${WP_DB_PASSWORD}
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
-    volumes:
-      - db:/var/lib/mysql
+      MARIADB_DATABASE: ${WP_DB} 
+      MARIADB_USER: ${WP_DB_USER} 
+      MARIADB_PASSWORD: ${WP_DB_PASS} 
+      MARIADB_ROOT_PASSWORD: ${WP_DB_ROOT_PASS} 
+      MARIADB_GALERA_MARIABACKUP_USER: ${WP_DB_USER}
+      MARIADB_GALERA_MARIABACKUP_PASSWORD: ${WP_DB_PASS}
+    volumes: 
+      - db1:/bitnami/mariadb
 
 volumes:
   wordpress:
-  db:
+  db1:
+
