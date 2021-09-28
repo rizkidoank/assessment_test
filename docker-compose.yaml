@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  wordpress:
+    image: wordpress:5.8.1-fpm-alpine
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: ${WP_DB_HOST}
+      WORDPRESS_DB_USER: ${WP_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WP_DB_DATABASE}}
+    volumes:
+      - wordpress:/var/www/html
+
+  db:
+    image: mysql:8.0.26
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${WP_DB_HOST}
+      MYSQL_USER: ${WP_DB_USER}
+      MYSQL_PASSWORD: ${WP_DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:
